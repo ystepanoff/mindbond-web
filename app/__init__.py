@@ -1,15 +1,18 @@
-import os
 from flask import Flask
-from flask_login import LoginManager
 
-basedir = os.path.abspath(os.path.dirname(__file__))
+from config import DevConfig
 
-app = Flask(__name__)
-app.config.from_object('app.config.Config')
+def create_app(config_class=DevConfig):
+	app = Flask(__name__)
+	app.config.from_object(config_class)
 
-login_manager = None
+	# Initialize Flask extensions here
 
-# login_manager = LoginManager()
-# login_manager.init_app(app)
+	# Register blueprints here
+	with app.app_context():
+		from app.main import bp as main_bp
+		from app.auth import bp as auth_bp
+		app.register_blueprint(main_bp)
+		app.register_blueprint(auth_bp)
 
-from app import views
+	return app
