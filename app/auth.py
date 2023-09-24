@@ -8,6 +8,7 @@ from flask import (
 	request,
 	redirect,
 	render_template,
+	flash,
 	Blueprint,
 )
 
@@ -33,4 +34,21 @@ def login():
 			return response.text
 		else:
 			return str(response.text)
-	return render_template('main/login.html')
+	return render_template('auth/login.html')
+
+
+@bp.route('/signup', methods=['GET', 'POST'])
+def signup():
+	if request.method == 'POST':
+		email = request.form.get('email')
+		password = request.form.get('password')
+		confirm_password = request.form.get('confirm_password')
+		print()
+		if password == confirm_password:
+			data = {
+				'email': email,
+				'password': password,
+			}
+		else:
+			flash('Passwords do not match')
+	return render_template('auth/signup.html')
