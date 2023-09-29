@@ -1,4 +1,5 @@
 from typing import Tuple
+import http
 
 import requests
 import orjson as json
@@ -24,7 +25,7 @@ def login():
         }
         print(data)
         response = requests.post(current_app.get_service_url('login'), json=data)
-        if response.status_code == 200:
+        if response.status_code == http.HTTPStatus.OK:
             return response.text
         else:
             return str(response.text)
@@ -43,10 +44,12 @@ def signup():
                 'password': password,
             }
             response = requests.post(current_app.get_service_url('signup'), json=data)
-            if response.status_code == 200:
-                return response.text
+            payload = json.loads(response.text)
+            if response.status_code == http.HTTPStatus.CREATED:
+                flash("Successfully registered. You may log in now.")
+                return redirect('/login')
             else:
-                return str(response.text)
+                flash(f"{payload['status']}: {payload['error']}")
         else:
             flash('Passwords do not match')
     return render_template('auth/signup.html')
