@@ -9,6 +9,7 @@ from flask import (
     request,
     redirect,
     render_template,
+    make_response,
     flash,
     Blueprint,
 )
@@ -23,12 +24,17 @@ def login():
             'email': request.form.get('email', ''),
             'password': request.form.get('password', ''),
         }
-        print(data)
         response = requests.post(current_app.get_service_url('login'), json=data)
-        if response.status_code == http.HTTPStatus.OK:
-            return response.text
+        payload = json.loads(response.text)
+        if payload['status'] == http.HTTPStatus.OK:
+            user_id = payload['userId']
+            user_token = payload['token']
+            response = make_response(redirect('/'))
+            response.set_cookie('_id', str(user_id))
+            response.set_cookie('_token', user_token)
+            return response
         else:
-            return str(response.text)
+            flash(f"{payload['status']}: {payload['error']}")
     return render_template('auth/login.html')
 
 
@@ -45,7 +51,7 @@ def signup():
             }
             response = requests.post(current_app.get_service_url('signup'), json=data)
             payload = json.loads(response.text)
-            if response.status_code == http.HTTPStatus.CREATED:
+            if payload['status'] == http.HTTPStatus.CREATED:
                 flash("Successfully registered. You may log in now.")
                 return redirect('/login')
             else:
