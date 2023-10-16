@@ -1,27 +1,38 @@
-import traceback
+from typing import Optional, Dict, Any
 
+import requests
+import http
 from flask import (
     request,
-    jsonify,
     json,
     current_app,
     redirect,
+    render_template,
     Blueprint,
-    make_response,
 )
+
+
+def validate_user(user_id: int, user_token: str) -> Optional[Dict[str, Any]]:
+    response = requests.post(current_app.get_service_url('validate'), json={'token': user_token})
+    payload = json.loads(response.text)
+    print(payload)
+    if payload['status'] == http.HTTPStatus.OK and payload['userId'] == user_id:
+        return {
+            'id': payload['userId'],
+            'handle': payload['handle'],
+        }
+
 
 bp = Blueprint('main', __name__)
 
 
 @bp.route('/')
 def index():
-    user_id = request.cookies.get('_id')
-    user_token = request.cookies.get('_token')
+    user_id = int(request.cookies.get('_id', 0))
+    user_token = request.cookies.get('_token', '')
 
-    if (
-        user_id is not None and
-        user_token is not None
-    ):
-        return user_id
+    user = validate_user(user_id, user_token)
+    if user is not None:
+        return render_template('main/index.html', **user)
 
     return redirect('/login')

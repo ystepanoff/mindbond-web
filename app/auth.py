@@ -14,6 +14,8 @@ from flask import (
     Blueprint,
 )
 
+from .main import validate_user
+
 bp = Blueprint('auth', __name__)
 
 
@@ -36,6 +38,19 @@ def login():
         else:
             flash(f"{payload['status']}: {payload['error']}")
     return render_template('auth/login.html')
+
+
+@bp.route('/logout', methods=['GET', 'POST'])
+def logout():
+    user_id = int(request.cookies.get('_id', 0))
+    user_token = request.cookies.get('_token', '')
+    if validate_user(user_id, user_token):
+        data = {
+            'id': user_id,
+            'token': user_token,
+        }
+        requests.post(current_app.get_service_url('logout'), json=data)
+    return redirect('/login')
 
 
 @bp.route('/signup', methods=['GET', 'POST'])
