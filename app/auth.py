@@ -59,10 +59,12 @@ def signup():
         email = request.form.get('email')
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
+        handle = request.form.get('handle')
         if password == confirm_password:
             data = {
                 'email': email,
                 'password': password,
+                'handle': handle,
             }
             response = requests.post(current_app.get_service_url('signup'), json=data)
             payload = json.loads(response.text)
