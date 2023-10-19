@@ -32,6 +32,6 @@ def index():
 
     user = validate_user(user_id, user_token)
     if user is not None:
-        return render_template('main/index.html', **user)
+        return render_template('index.html', **user)
 
     return redirect('/login')

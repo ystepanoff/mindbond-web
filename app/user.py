@@ -1,4 +1,3 @@
-from typing import Tuple
 import http
 
 import requests
@@ -16,7 +15,7 @@ from flask import (
 
 from .main import validate_user
 
-bp = Blueprint('auth', __name__)
+bp = Blueprint('user', __name__)
 
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -37,7 +36,7 @@ def login():
             return response
         else:
             flash(f"{payload['status']}: {payload['error']}")
-    return render_template('auth/login.html')
+    return render_template('user/login.html')
 
 
 @bp.route('/logout', methods=['GET', 'POST'])
@@ -77,4 +76,4 @@ def signup():
                 flash(f"{payload['status']}: {payload['error']}")
         else:
             flash('Passwords do not match')
-    return render_template('auth/signup.html')
+    return render_template('user/signup.html')

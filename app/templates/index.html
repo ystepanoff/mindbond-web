@@ -10,10 +10,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#home">Random</a>
+                    <a class="nav-link" href="/random">Random</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#projects">Saved</a>
+                    <a class="nav-link" href="/contacts">Contacts</a>
                 </li>
             </ul>
 
@@ -31,6 +31,8 @@
 </nav>
 <section class="vh-100 gradient-custom">
     <div class="container py-5 h-100">
+        {% block chat %}
+        {% endblock %}
     </div>
 </section>
 {% endblock %}
