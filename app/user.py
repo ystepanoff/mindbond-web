@@ -89,5 +89,26 @@ def signup():
                 return redirect('/login')
             else:
                 flash(f"{payload['status']}: {payload['error']}")
-
     return render_template('user/signup.html')
+
+
+@bp.route('/settings', methods=['GET', 'POST'])
+def settings():
+    user_id = int(request.cookies.get('_id', 0))
+    user_token = request.cookies.get('_token', '')
+    user = validate_user(user_id, user_token)
+    if user is None:
+        return redirect('/login')
+    if request.method == 'POST':
+        email = request.form.get('email')
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_new_password = request.form.get('confirm_new_password')
+        handle = request.form.get('handle')
+        language = request.form.get('language')
+        if current_password is None:
+            flash('Please specify the current password')
+        elif language not in LANGUAGE_CODES:
+            flash('Please specify a correct language code.')
+
+    return render_template('user/settings.html', **user)
