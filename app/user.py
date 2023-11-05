@@ -110,5 +110,27 @@ def settings():
             flash('Please specify the current password')
         elif language not in LANGUAGE_CODES:
             flash('Please specify a correct language code.')
+        else:
+            data = {
+                'email': user['email'],
+                'password': current_password,
+            }
+            response = requests.post(current_app.get_service_url('dry-login'), json=data)
+            payload = json.loads(response.text)
+            if payload['status'] == http.HTTPStatus.OK:
+                data = {
+                    'email': email,
+                    'handle': handle,
+                    'language': language,
+                }
+                if new_password is not None:
+                    if new_password == confirm_new_password:
+                        data['password'] = new_password
+                    else:
+                        flash('Passwords do not match')
+                        return render_template('user/settings.html', **user)
+                # update settings
+            else:
+                flash(f"{payload['status']}: {payload['error']}")
 
     return render_template('user/settings.html', **user)
