@@ -118,18 +118,29 @@ def settings():
             response = requests.post(current_app.get_service_url('dry-login'), json=data)
             payload = json.loads(response.text)
             if payload['status'] == http.HTTPStatus.OK:
-                data = {
-                    'email': email,
-                    'handle': handle,
-                    'language': language,
-                }
-                if new_password is not None:
-                    if new_password == confirm_new_password:
-                        data['password'] = new_password
+                if (
+                    new_password is None or
+                    new_password == confirm_new_password
+                ):
+                    update_data = {
+                        'userId': user['userId'],
+                        'email': email,
+                        'password': new_password or current_password,
+                        'handle': handle,
+                        'language': language,
+                    }
+                    update_response = requests.post(current_app.get_service_url('update'), json=update_data)
+                    print("CHECK", update_response.text)
+                    update_payload = json.loads(update_response.text)
+                    if update_payload['status'] == http.HTTPStatus.OK:
+                        update_data.pop('password')
+                        user.update(update_data)
+                        flash('Updated successfully')
                     else:
-                        flash('Passwords do not match')
-                        return render_template('user/settings.html', **user)
-                # update settings
+                        flash(f"{update_payload['status']}: {update_payload['error']}")
+                else:
+                    if new_password is not None:
+                        flash("Passwords do not match")
             else:
                 flash(f"{payload['status']}: {payload['error']}")
 
