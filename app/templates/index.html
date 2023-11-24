@@ -1,37 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-<nav class="navbar navbar-expand-lg fixed-top navbarScroll navbar-dark bg-dark">
-    <div class="container">
-        <span class="navbar-brand">MindBond</span>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/random">Random</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/friends">Friends</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/ai">AI</a>
-                </li>
-            </ul>
-
-        </div>
-        <span class="text-white">{{handle}}</span>
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/settings"><span class="fa-solid fa-gear"></span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/logout"><span class="fa-solid fa-arrow-right-from-bracket"></span></a>
-            </li>
-        </ul>
-    </div>
-</nav>
 <section class="vh-100 gradient-custom">
     <div class="container py-5 h-100">
         {% block chat %}

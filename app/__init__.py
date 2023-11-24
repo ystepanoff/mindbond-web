@@ -3,11 +3,11 @@ from flask import Flask
 from config import DevConfig
 
 
-def get_service_url(config_class: object = DevConfig, type: str = None) -> str:
+def get_service_url(config_class: object = DevConfig, path: str = None) -> str:
     return "http://{0}:{1}{2}".format(
         config_class.API_HOST,
         config_class.API_PORT,
-        config_class.API_PATHS[type],
+        path,
     )
 
 
