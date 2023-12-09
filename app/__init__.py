@@ -22,7 +22,9 @@ def create_app(config_class=DevConfig):
     with app.app_context():
         from app.main import bp as main_bp
         from app.user import bp as user_bp
+        from app.chat import bp as chat_bp
         app.register_blueprint(main_bp)
         app.register_blueprint(user_bp)
+        app.register_blueprint(chat_bp)
 
     return app
