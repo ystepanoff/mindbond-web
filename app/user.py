@@ -1,3 +1,5 @@
+from typing import Union
+
 import http
 
 import requests
@@ -12,6 +14,7 @@ from flask import (
     flash,
     Blueprint,
 )
+from werkzeug.wrappers import Response
 
 from .main import validate_user
 
@@ -30,7 +33,7 @@ bp = Blueprint('user', __name__)
 
 
 @bp.route('/login', methods=['GET', 'POST'])
-def login():
+def login() -> Union[Response, str]:
     if request.method == 'POST':
         data = {
             'email': request.form.get('email', ''),
@@ -51,7 +54,7 @@ def login():
 
 
 @bp.route('/logout', methods=['GET', 'POST'])
-def logout():
+def logout() -> Union[Response, str]:
     user_id = int(request.cookies.get('_id', 0))
     user_token = request.cookies.get('_token', '')
     if validate_user(user_id, user_token):
@@ -64,7 +67,7 @@ def logout():
 
 
 @bp.route('/signup', methods=['GET', 'POST'])
-def signup():
+def signup() -> Union[Response, str]:
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -82,7 +85,7 @@ def signup():
                 'handle': handle,
                 'language': language,
             }
-            response = requests.post(current_app.get_service_url('/auth/signup'), json=data)
+            response = requests.post(current_app.get_service_url('/auth/register'), json=data)
             payload = json.loads(response.text)
             if payload['status'] == http.HTTPStatus.CREATED:
                 flash("Successfully registered. You may log in now.")
@@ -93,7 +96,7 @@ def signup():
 
 
 @bp.route('/settings', methods=['GET', 'POST'])
-def settings():
+def settings() -> Union[Response, str]:
     user_id = int(request.cookies.get('_id', 0))
     user_token = request.cookies.get('_token', '')
     user = validate_user(user_id, user_token)

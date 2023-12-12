@@ -14,9 +14,9 @@
                             <div class="modal-content">
                                 <div class="chat-header">
                                     <div class="msg-search">
-                                        <input type="text" class="form-control" id="inlineFormInputGroup"
+                                        <input type="text" class="form-control" id="actionAddContactInput"
                                                placeholder="Search" aria-label="search">
-                                        <a class="add" href="#"><i class="fa-solid fa-plus"></i></a>
+                                        <a class="add" href="#"><i id="actionAddContactTrigger" class="fa-solid fa-plus"></i></a>
                                     </div>
 
                                 </div>
@@ -181,4 +181,5 @@
     </div>
     </div>
 </section>
+<script src="{{ url_for('static', filename='chats.js') }}"></script>
 {% endblock %}

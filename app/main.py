@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Union
 
 import requests
 import http
@@ -10,7 +10,7 @@ from flask import (
     render_template,
     Blueprint,
 )
-
+from werkzeug.wrappers import Response
 
 def validate_user(user_id: int, user_token: str) -> Optional[Dict[str, Any]]:
     response = requests.post(current_app.get_service_url('/auth/validate'), json={'token': user_token})
@@ -23,7 +23,7 @@ bp = Blueprint('main', __name__)
 
 
 @bp.route('/')
-def index():
+def index() -> Union[Response, str]:
     user_id = int(request.cookies.get('_id', 0))
     user_token = request.cookies.get('_token', '')
 
