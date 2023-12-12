@@ -50,8 +50,15 @@ def add_contact() -> Union[Response, str]:
         'token': user_token,
         'handle': request_data.get('handle', ''),
     }
-    response = requests.post(current_app.get_service_url('/chat/add_contact'), json=data)
-    if response.status_code == http.HTTPStatus.CREATED:
+    response = requests.post(
+        current_app.get_service_url('/chat/add_contact'),
+        headers={'Authorization': f'Bearer {user_token}'},
+        json=data,
+    )
+
+    response_data = json.loads(response.text)
+
+    if response_data['status'] == http.HTTPStatus.CREATED:
         return json.dumps({'status': http.HTTPStatus.CREATED})
 
-    return redirect('/chats')
+    return json.dumps({'status': response_data['status'], 'error': response_data['error']})
