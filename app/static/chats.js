@@ -2,7 +2,7 @@ let loadChat = (contact) => {
     let chatContactTextElementTextDiv = document.getElementById("chatContactText");
     chatContactTextElementTextDiv.innerHTML = "<h3>" + contact["handle"] + "</h3>";
 
-    if (approved === false) {
+    if (contact["approved"] === false) {
     } else {
     }
     return null;

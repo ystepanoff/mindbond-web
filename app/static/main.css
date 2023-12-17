@@ -349,13 +349,13 @@ a.add img {
     margin: 15px 0;
 }
 
-.msg-body ul li.sender {
+.msg-body ul li.message_from {
     display: block;
     width: 100%;
     position: relative;
 }
 
-.msg-body ul li.sender:before {
+.msg-body ul li.message_from:before {
     display: block;
     clear: both;
     content: '';
@@ -372,7 +372,7 @@ a.add img {
     transform: rotate(-37deg);
 }
 
-.msg-body ul li.sender p {
+.msg-body ul li.message_from p {
     color: #000;
     font-size: 14px;
     line-height: 1.5;
@@ -386,7 +386,7 @@ a.add img {
     margin-bottom: 0;
 }
 
-.msg-body ul li.sender p b {
+.msg-body ul li.message_from p b {
     display: block;
     color: #180660;
     font-size: 14px;
@@ -394,14 +394,14 @@ a.add img {
     font-weight: 500;
 }
 
-.msg-body ul li.repaly {
+.msg-body ul li.message_to {
     display: block;
     width: 100%;
     text-align: right;
     position: relative;
 }
 
-.msg-body ul li.repaly:before {
+.msg-body ul li.message_to:before {
     display: block;
     clear: both;
     content: '';
@@ -418,7 +418,7 @@ a.add img {
     transform: rotate(37deg);
 }
 
-.msg-body ul li.repaly p {
+.msg-body ul li.message_to p {
     color: #fff;
     font-size: 14px;
     line-height: 1.5;
@@ -432,7 +432,7 @@ a.add img {
     margin-bottom: 0;
 }
 
-.msg-body ul li.repaly p b {
+.msg-body ul li.message_to p b {
     display: block;
     color: #061061;
     font-size: 14px;
@@ -440,7 +440,7 @@ a.add img {
     font-weight: 500;
 }
 
-.msg-body ul li.repaly:after {
+.msg-body ul li.message_to:after {
     display: block;
     content: '';
     clear: both;
@@ -454,7 +454,7 @@ a.add img {
     font-weight: 400;
 }
 
-li.repaly .time {
+li.message_to .time {
     margin-right: 20px;
 }
 
@@ -694,7 +694,7 @@ button:focus {
         font-size: 12px;
     }
 
-    .msg-body ul li.sender p {
+    .msg-body ul li.message_from p {
         font-size: 13px;
         padding: 8px;
         border-bottom-left-radius: 6px;
@@ -702,7 +702,7 @@ button:focus {
         border-bottom-right-radius: 6px;
     }
 
-    .msg-body ul li.repaly p {
+    .msg-body ul li.message_to p {
         font-size: 13px;
         padding: 8px;
         border-top-left-radius: 6px;
