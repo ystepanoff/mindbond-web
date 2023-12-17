@@ -1,5 +1,10 @@
-let loadChat = (contactId, approved) => {
-    console.log(contactId, approved);
+let loadChat = (contact) => {
+    let chatContactTextElementTextDiv = document.getElementById("chatContactText");
+    chatContactTextElementTextDiv.innerHTML = "<h3>" + contact["handle"] + "</h3>";
+
+    if (approved === false) {
+    } else {
+    }
     return null;
 }
 
@@ -16,7 +21,7 @@ window.onload = () => {
             let contactElement = document.createElement("a");
             contactElement.href = "#";
             contactElement.id = "aContact-" + contact["id"];
-            contactElement.onclick = () => loadChat(contact["userId"], contact["approved"]);
+            contactElement.onclick = () => loadChat(contact);
             contactElement.className = "d-flex align-items-center";
 
             let contactElementImageDiv = document.createElement("div");
