@@ -20,7 +20,7 @@ let requestEndpoint = (endpoint, data) => {
     xhr.setRequestHeader('Authorization', 'Bearer ' + data["token"]);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(data));
-    if (xhr.status === 201) {
+    if (xhr.status === 200 || xhr.status === 201) {
         return JSON.parse(xhr.responseText);
     }
     return null;
