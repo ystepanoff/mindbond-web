@@ -11,7 +11,23 @@ let loadChat = (contact) => {
     let userId = parseInt(getCookie("_id"));
 
     let chatContentDiv = document.getElementById('chatContentDiv');
-    chatContentDiv.innerHTML = '';
+    chatContentDiv.innerHTML = "";
+
+    let messageHead = document.createElement("div");
+    messageHead.className = "msg-head";
+    messageHead.innerHTML =
+        '<div class="row">' +
+        '   <div class="col-8">' +
+        '       <div class="d-flex align-items-center">' +
+        '           <div class="flex-shrink-0">' +
+        '               <img class="img-fluid" src="{{ url_for(\'static\', filename=\'images/user.png\') }}" alt="user img" />' +
+        '           </div>' +
+        '           <div id="chatContactText" className="flex-grow-1 ms-3">' +
+        '               <h3>' + contact["handle"] + '</h3>' +
+        '           </div>' +
+        '       </div>' +
+        '   </div>' +
+        '</div>';
 
 
     // TODO: create the following structure:
@@ -145,39 +161,42 @@ let loadChat = (contact) => {
     return null;
 }
 
+let populateContactList = (contacts) => {
+    if (typeof contacts === "undefined") {
+        contacts = [];
+    }
+    for (let contact of contacts) {
+        let chatListElement = document.getElementById("listChats");
+
+        let contactElement = document.createElement("a");
+        contactElement.href = "#";
+        contactElement.id = "aContact-" + contact["id"];
+        contactElement.onclick = () => loadChat(contact);
+        contactElement.className = "d-flex align-items-center";
+
+        let contactElementImageDiv = document.createElement("div");
+        contactElementImageDiv.className = "flex-shrink-0";
+        contactElementImageDiv.innerHTML = "<img class=\"img-fluid\" " +
+            "src=\"/static/images/user.png\" " +
+            "alt=\"user img\">";
+        //"<span class=\"active\"></span>";
+        contactElement.appendChild(contactElementImageDiv);
+
+        let contactElementTextDiv = document.createElement("div");
+        contactElementTextDiv.className = "flex-grow-1 ms-3";
+        contactElementTextDiv.innerHTML = "<h3>" + contact["handle"] + "</h3>";
+        contactElement.appendChild(contactElementTextDiv);
+
+        chatListElement.appendChild(contactElement);
+    }
+};
+
 window.onload = () => {
     let userId = parseInt(getCookie("_id"));
 
     let response = requestEndpoint("/chat/fetch_contacts", {});
     if (response["status"] === 200) {
-        let contacts = response["contacts"];
-        if (typeof contacts === "undefined") {
-            contacts = [];
-        }
-        for (let contact of contacts) {
-            let chatListElement = document.getElementById("listChats");
-
-            let contactElement = document.createElement("a");
-            contactElement.href = "#";
-            contactElement.id = "aContact-" + contact["id"];
-            contactElement.onclick = () => loadChat(contact);
-            contactElement.className = "d-flex align-items-center";
-
-            let contactElementImageDiv = document.createElement("div");
-            contactElementImageDiv.className = "flex-shrink-0";
-            contactElementImageDiv.innerHTML = "<img class=\"img-fluid\" " +
-                "src=\"/static/images/user.png\" " +
-                "alt=\"user img\">";
-            //"<span class=\"active\"></span>";
-            contactElement.appendChild(contactElementImageDiv);
-
-            let contactElementTextDiv = document.createElement("div");
-            contactElementTextDiv.className = "flex-grow-1 ms-3";
-            contactElementTextDiv.innerHTML = "<h3>" + contact["handle"] + "</h3>";
-            contactElement.appendChild(contactElementTextDiv);
-
-            chatListElement.appendChild(contactElement);
-        }
+        populateContactList(response["contacts"]);
     } else {
         alert("Failed to fetch contacts: " + response["error"]);
     }
