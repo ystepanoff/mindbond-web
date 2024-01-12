@@ -13,6 +13,8 @@ let loadChat = (contact) => {
     let chatContentDiv = document.getElementById('chatContentDiv');
     chatContentDiv.innerHTML = "";
 
+    console.log(contact);
+
     let messageHead = document.createElement("div");
     messageHead.className = "msg-head";
     messageHead.innerHTML =
@@ -20,53 +22,52 @@ let loadChat = (contact) => {
         '   <div class="col-8">' +
         '       <div class="d-flex align-items-center">' +
         '           <div class="flex-shrink-0">' +
-        '               <img class="img-fluid" src="{{ url_for(\'static\', filename=\'images/user.png\') }}" alt="user img" />' +
+        '               <img class="img-fluid" src="/static/images/user.png" alt="user img" />' +
         '           </div>' +
-        '           <div id="chatContactText" className="flex-grow-1 ms-3">' +
+        '           <div id="chatContactText" class="flex-grow-1 ms-3">' +
         '               <h3>' + contact["handle"] + '</h3>' +
         '           </div>' +
         '       </div>' +
         '   </div>' +
+        '   <div class="col-4">' +
+        '       <ul class="moreoption">' +
+        '           <li class="navbar nav-item dropdown">' +
+        '               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">' +
+        '                   <i class="fa fa-ellipsis-v" aria-hidden="true"></i>' +
+        '               </a>' +
+        '               <ul class="dropdown-menu">' +
+        '                   <li><a class="dropdown-item" href="#">Action</a></li>' +
+        '                   <li><a class="dropdown-item" href="#">Another action</a></li>' +
+        '                   <li><hr class="dropdown-divider"></li>' +
+        '                   <li><a class="dropdown-item" href="#">Something else here</a></li>' +
+        '               </ul>' +
+        '           </li>' +
+        '       </ul>' +
+        '   </div>' +
         '</div>';
 
+    let modalBody = document.createElement('div');
+    modalBody.className = "modal-body";
+    modalBody.innerHTML =
+        '<div class="msg-body">' +
+        '   <ul>' +
+        '       <div id="chatMessages"></div>'
+        '   </ul>' +
+        '</div>';
 
-    // TODO: create the following structure:
-    // <div className="msg-head">
-    //     <div className="row">
-    //         <div className="col-8">
-    //             <div className="d-flex align-items-center">
-    //                 <div className="flex-shrink-0">
-    //                     <img className="img-fluid"
-    //                          src="{{ url_for('static', filename='images/user.png') }}"
-    //                          alt="user img">
-    //                 </div>
-    //                 <div id="chatContactText" className="flex-grow-1 ms-3">
-    //                     <h3>Pasha Celluloid</h3>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //         <div className="col-4">
-    //             <ul className="moreoption">
-    //                 <li className="navbar nav-item dropdown">
-    //                     <a className="nav-link dropdown-toggle" href="#" role="button"
-    //                        data-bs-toggle="dropdown" aria-expanded="false"><i
-    //                         className="fa fa-ellipsis-v" aria-hidden="true"></i></a>
-    //                     <ul className="dropdown-menu">
-    //                         <li><a className="dropdown-item" href="#">Action</a></li>
-    //                         <li><a className="dropdown-item" href="#">Another action</a></li>
-    //                         <li>
-    //                             <hr className="dropdown-divider">
-    //                         </li>
-    //                         <li><a className="dropdown-item" href="#">Something else here</a>
-    //                         </li>
-    //                     </ul>
-    //                 </li>
-    //             </ul>
-    //         </div>
-    //     </div>
-    // </div>
-    //
-    //
+    let sendBox = document.createElement('div');
+    sendBox.className = "send-box";
+    sendBox.innerHTML =
+        '<form id="sendForm">' +
+        '   <input type="text" id="actionNewMessageInput" class="form-control" aria-label="message…" placeholder="Write message…" />' +
+        '   <button type="button" id="actionNewMessageTrigger"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send </button>' +
+        '</form>';
+
+    chatContentDiv.appendChild(messageHead);
+    chatContentDiv.appendChild(modalBody);
+    chatContentDiv.appendChild(sendBox);
+
+    // Messages structure:
     // <div className="modal-body">
     //     <div className="msg-body">
     //         <ul>
@@ -112,33 +113,25 @@ let loadChat = (contact) => {
     //         </ul>
     //     </div>
     // </div>
-    //
-    //
-    // <div className="send-box">
-    //     <form>
-    //         <input type="text" id="actionNewMessageInput" className="form-control" aria-label="message…"
-    //                placeholder="Write message…">
-    //
-    //             <button type="button" id="actionNewMessageTrigger"><i className="fa fa-paper-plane"
-    //                                                                   aria-hidden="true"></i> Send
-    //             </button>
-    //     </form>
-    // </div>
+
+    document.getElementById('sendForm').addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+        }
+    });
 
     let chatContactTextElementTextDiv = document.getElementById("chatContactText");
     chatContactTextElementTextDiv.innerHTML = "<h3>" + contact["handle"] + "</h3>";
 
     let actionNewMessageInputElement = document.getElementById("actionNewMessageInput");
     let actionNewMessageTriggerElement = document.getElementById("actionNewMessageTrigger");
-    actionNewMessageInputElement.addEventListener("keyup", (event) => {
+    actionNewMessageInputElement.addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
             sendMessage(userId, contact["userId"], document.getElementById("actionNewMessageInput").value);
         }
-        return true;
     });
     actionNewMessageTriggerElement.addEventListener("click", () => {
         sendMessage(userId, contact["userId"], document.getElementById("actionNewMessageInput").value);
-        return true;
     });
 
     // TODO: handle unapproved contacts
