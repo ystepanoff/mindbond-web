@@ -120,8 +120,8 @@ let loadChat = (contact) => {
         }
     });
 
-    let chatContactTextElementTextDiv = document.getElementById("chatContactText");
-    chatContactTextElementTextDiv.innerHTML = "<h3>" + contact["handle"] + "</h3>";
+    /*let chatContactTextElementTextDiv = document.getElementById("chatContactText");
+    chatContactTextElementTextDiv.innerHTML = "<h3>" + contact["handle"] + "</h3>";*/ // Not needed
 
     let actionNewMessageInputElement = document.getElementById("actionNewMessageInput");
     let actionNewMessageTriggerElement = document.getElementById("actionNewMessageTrigger");
