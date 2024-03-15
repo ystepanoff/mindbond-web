@@ -67,6 +67,9 @@ let loadChat = (contact) => {
     chatContentDiv.appendChild(modalBody);
     chatContentDiv.appendChild(sendBox);
 
+    let chatBody = document.createElement('div')
+    chatBody.id = ""
+
     // Messages structure:
     // <div className="modal-body">
     //     <div className="msg-body">
