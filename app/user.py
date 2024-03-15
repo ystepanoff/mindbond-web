@@ -39,7 +39,7 @@ def login() -> Union[Response, str]:
             'email': request.form.get('email', ''),
             'password': request.form.get('password', ''),
         }
-        response = requests.post(current_app.get_service_url('/auth/login'), json=data)
+        response = requests.post(current_app.service_url('/auth/login'), json=data)
         payload = json.loads(response.text)
         if payload['status'] == http.HTTPStatus.OK:
             user_id = payload['userId']
@@ -62,7 +62,7 @@ def logout() -> Union[Response, str]:
             'id': user_id,
             'token': user_token,
         }
-        requests.post(current_app.get_service_url('/auth/logout'), json=data)
+        requests.post(current_app.service_url('/auth/logout'), json=data)
     return redirect('/login')
 
 
@@ -85,7 +85,7 @@ def signup() -> Union[Response, str]:
                 'handle': handle,
                 'language': language,
             }
-            response = requests.post(current_app.get_service_url('/auth/register'), json=data)
+            response = requests.post(current_app.service_url('/auth/register'), json=data)
             payload = json.loads(response.text)
             if payload['status'] == http.HTTPStatus.CREATED:
                 flash("Successfully registered. You may log in now.")
@@ -118,7 +118,7 @@ def settings() -> Union[Response, str]:
                 'email': user['email'],
                 'password': current_password,
             }
-            response = requests.post(current_app.get_service_url('/auth/dry-login'), json=data)
+            response = requests.post(current_app.service_url('/auth/dry-login'), json=data)
             payload = json.loads(response.text)
             if payload['status'] == http.HTTPStatus.OK:
                 if (
@@ -133,7 +133,7 @@ def settings() -> Union[Response, str]:
                         'language': language,
 	                    'token': user_token,
                     }
-                    update_response = requests.post(current_app.get_service_url('/auth/update'), json=update_data)
+                    update_response = requests.post(current_app.service_url('/auth/update'), json=update_data)
                     update_payload = json.loads(update_response.text)
                     if update_payload['status'] == http.HTTPStatus.OK:
                         update_data.pop('password')

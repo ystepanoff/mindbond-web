@@ -31,7 +31,7 @@ def chats() -> Union[Response, str]:
     if request.method == 'POST':
         pass
 
-    return render_template('chat/chats.html', **user)
+    return render_template('chat/chats.html', **user, ws_endpoint=current_app.ws_endpoint)
 
 
 @bp.route('/chats/add_contact', methods=['POST'])
@@ -51,7 +51,7 @@ def add_contact() -> Union[Response, str]:
         'handle': request_data.get('handle', ''),
     }
     response = requests.post(
-        current_app.get_service_url('/chat/add_contact'),
+        current_app.service_url('/chat/add_contact'),
         headers={'Authorization': f'Bearer {user_token}'},
         json=data,
     )

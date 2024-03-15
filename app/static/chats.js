@@ -189,6 +189,10 @@ let populateContactList = (contacts) => {
 
 window.onload = () => {
     let userId = parseInt(getCookie("_id"));
+    let ws = new WebSocket(wsEndpoint);
+    ws.onopen = () => {
+        ws.send("Test");
+    };
 
     let response = requestEndpoint("/chat/fetch_contacts", {});
     if (response["status"] === 200) {

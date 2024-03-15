@@ -13,7 +13,7 @@ from flask import (
 from werkzeug.wrappers import Response
 
 def validate_user(user_id: int, user_token: str) -> Optional[Dict[str, Any]]:
-    response = requests.post(current_app.get_service_url('/auth/validate'), json={'token': user_token})
+    response = requests.post(current_app.service_url('/auth/validate'), json={'token': user_token})
     payload = json.loads(response.text)
     if payload['status'] == http.HTTPStatus.OK and payload['userId'] == user_id:
         return payload
