@@ -4,7 +4,21 @@ let sendMessage = (userFromId, userToId, message) => {
         "userToId": userToId,
         "message": message
     });
-    console.log(response);
+    if (response["status"] !== 200) {
+        alert("Error sending message");
+    }
+}
+
+let fetchMessages = (userFromId, userToId, count) => {
+    let response = requestEndpoint("/chat/messages", {
+        "userFromId": userFromId,
+        "userToId": userToId,
+        "message": message
+    });
+    if (response["status"] !== 200) {
+        alert("Error fetching messages");
+    }
+    return response;
 }
 
 let loadChat = (contact) => {
@@ -13,7 +27,7 @@ let loadChat = (contact) => {
     let chatContentDiv = document.getElementById('chatContentDiv');
     chatContentDiv.innerHTML = "";
 
-    console.log(contact);
+
 
     let messageHead = document.createElement("div");
     messageHead.className = "msg-head";
