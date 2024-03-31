@@ -9,11 +9,11 @@ let sendMessage = (userFromId, userToId, message) => {
     }
 }
 
-let fetchMessages = (userFromId, userToId, count) => {
+let fetchMessages = (userId, contactId, count) => {
     let response = requestEndpoint("/chat/messages", {
-        "userFromId": userFromId,
-        "userToId": userToId,
-        "message": message
+        "userId": userId,
+        "contactId": contactId,
+        "count": count
     });
     if (response["status"] !== 200) {
         alert("Error fetching messages");
@@ -81,8 +81,19 @@ let loadChat = (contact) => {
     chatContentDiv.appendChild(modalBody);
     chatContentDiv.appendChild(sendBox);
 
-    let chatBody = document.createElement('div')
-    chatBody.id = ""
+    let messages = fetchMessages(userId, contact["userId"], 100);
+    console.log(messages);
+
+    let chatBody = document.getElementById("chatMessages");
+    let chatBodyUL = document.createElement("ul");
+    chatBody.appendChild(chatBodyUL);
+    for (let message of messages["messages"]) {
+        if (message["userOriginal"] == userId && message["userTranslated"] == contact["userId"]) {
+            chatBodyUL.innerHTML += '<li class="message_from"><p>' + message["original"] + '</p></li>';
+        } else if (message["userOriginal"] == contact["userId"] && message["userTranslated"] == userId) {
+            chatBodyUL.innerHTML += '<li class="message_to"><p>' + message["translated"] + '</p></li>';
+        }
+    }
 
     // Messages structure:
     // <div className="modal-body">
