@@ -1,13 +1,13 @@
-let sendMessage = (userFromId, userToId, message) => {
-    let response = requestEndpoint("/chat/send", {
-        "userFromId": userFromId,
-        "userToId": userToId,
-        "message": message
-    });
-    if (response["status"] !== 200) {
-        alert("Error sending message");
-    }
-}
+// let sendMessage = (userFromId, userToId, message) => {
+//     let response = requestEndpoint("/chat/send", {
+//         "userFromId": userFromId,
+//         "userToId": userToId,
+//         "message": message
+//     });
+//     if (response["status"] !== 200) {
+//         alert("Error sending message");
+//     }
+// }
 
 let fetchMessages = (userId, contactId, count) => {
     let response = requestEndpoint("/chat/messages", {
@@ -81,20 +81,6 @@ let loadChat = (contact) => {
     chatContentDiv.appendChild(modalBody);
     chatContentDiv.appendChild(sendBox);
 
-    let messages = fetchMessages(userId, contact["userId"], 100);
-    console.log(messages);
-
-    let chatBody = document.getElementById("chatMessages");
-    let chatBodyUL = document.createElement("ul");
-    chatBody.appendChild(chatBodyUL);
-    for (let message of messages["messages"]) {
-        if (message["userOriginal"] == userId && message["userTranslated"] == contact["userId"]) {
-            chatBodyUL.innerHTML += '<li class="message_to"><p>' + message["original"] + '</p></li>';
-        } else if (message["userOriginal"] == contact["userId"] && message["userTranslated"] == userId) {
-            chatBodyUL.innerHTML += '<li class="message_from"><p>' + message["translated"] + '</p></li>';
-        }
-    }
-
     // Messages structure:
     // <div className="modal-body">
     //     <div className="msg-body">
@@ -155,11 +141,11 @@ let loadChat = (contact) => {
     let actionNewMessageTriggerElement = document.getElementById("actionNewMessageTrigger");
     actionNewMessageInputElement.addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
-            sendMessage(userId, contact["userId"], document.getElementById("actionNewMessageInput").value);
+            wsSendMessage(contact["userId"], document.getElementById("actionNewMessageInput").value);
         }
     });
     actionNewMessageTriggerElement.addEventListener("click", () => {
-        sendMessage(userId, contact["userId"], document.getElementById("actionNewMessageInput").value);
+        wsSendMessage(contact["userId"], document.getElementById("actionNewMessageInput").value);
     });
 
     // TODO: handle unapproved contacts
@@ -175,8 +161,18 @@ let loadChat = (contact) => {
         let data = response["data"];
         let chatId = data["chatId"];
 
-        // TODO: load messages
+        let messages = fetchMessages(userId, contact["userId"], 100);
 
+        let chatBody = document.getElementById("chatMessages");
+        let chatBodyUL = document.createElement("ul");
+        chatBody.appendChild(chatBodyUL);
+        for (let message of messages["messages"]) {
+            if (message["userOriginal"] == userId && message["userTranslated"] == contact["userId"]) {
+                chatBodyUL.innerHTML += '<li class="message_to"><p>' + message["original"] + '</p></li>';
+            } else if (message["userOriginal"] == contact["userId"] && message["userTranslated"] == userId) {
+                chatBodyUL.innerHTML += '<li class="message_from"><p>' + message["translated"] + '</p></li>';
+            }
+        }
     }
 
     return null;
