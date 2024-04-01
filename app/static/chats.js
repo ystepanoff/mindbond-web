@@ -89,9 +89,9 @@ let loadChat = (contact) => {
     chatBody.appendChild(chatBodyUL);
     for (let message of messages["messages"]) {
         if (message["userOriginal"] == userId && message["userTranslated"] == contact["userId"]) {
-            chatBodyUL.innerHTML += '<li class="message_from"><p>' + message["original"] + '</p></li>';
+            chatBodyUL.innerHTML += '<li class="message_to"><p>' + message["original"] + '</p></li>';
         } else if (message["userOriginal"] == contact["userId"] && message["userTranslated"] == userId) {
-            chatBodyUL.innerHTML += '<li class="message_to"><p>' + message["translated"] + '</p></li>';
+            chatBodyUL.innerHTML += '<li class="message_from"><p>' + message["translated"] + '</p></li>';
         }
     }
 
@@ -214,10 +214,6 @@ let populateContactList = (contacts) => {
 
 window.onload = () => {
     let userId = parseInt(getCookie("_id"));
-    let ws = new WebSocket(wsEndpoint);
-    ws.onopen = () => {
-        ws.send("Test");
-    };
 
     let response = requestEndpoint("/chat/fetch_contacts", {});
     if (response["status"] === 200) {
@@ -225,6 +221,8 @@ window.onload = () => {
     } else {
         alert("Failed to fetch contacts: " + response["error"]);
     }
+
+    wsInit();
 
     document.getElementById("actionAddContactTrigger").addEventListener("click", function () {
         let response = requestEndpoint("/chat/add_contact", {
