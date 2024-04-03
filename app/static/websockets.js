@@ -13,6 +13,10 @@ let wsInit =  () => {
         }
         ws.send(JSON.stringify(data));
     };
+    ws.onmessage = (message) => {
+        data = JSON.parse(message.data);
+        addMessage(data);
+    }
 };
 
 let wsSendMessage = (userToId, message) => {
@@ -29,3 +33,15 @@ let wsSendMessage = (userToId, message) => {
     }
     ws.send(JSON.stringify(data));
 }
+
+let addMessage = (message) => {
+    let userId = parseInt(getCookie("_id"));
+    let chatBody = document.getElementById("chatMessages");
+    if (message["userOriginal"] === userId) {
+        chatBody.innerHTML += '<li class="message_to"><p>' + message["original"] + '</p></li>';
+    } else if (message["userTranslated"] === userId) {
+        chatBody.innerHTML += '<li class="message_from"><p>' + message["translated"] + '</p></li>';
+    }
+    let modalBody = document.getElementById("chatModalBody");
+    modalBody.scrollTop = modalBody.scrollHeight;
+};

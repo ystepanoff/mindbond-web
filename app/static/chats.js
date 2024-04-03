@@ -62,10 +62,11 @@ let loadChat = (contact) => {
 
     let modalBody = document.createElement('div');
     modalBody.className = "modal-body";
+    modalBody.id = "chatModalBody";
     modalBody.innerHTML =
         '<div class="msg-body">' +
         '   <ul>' +
-        '       <div id="chatMessages"></div>'
+        '       <div id="chatMessages"></div>' +
         '   </ul>' +
         '</div>';
 
@@ -141,11 +142,13 @@ let loadChat = (contact) => {
     let actionNewMessageTriggerElement = document.getElementById("actionNewMessageTrigger");
     actionNewMessageInputElement.addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
-            wsSendMessage(contact["userId"], document.getElementById("actionNewMessageInput").value);
+            wsSendMessage(contact["userId"], actionNewMessageInputElement.value);
+            actionNewMessageInputElement.value = "";
         }
     });
     actionNewMessageTriggerElement.addEventListener("click", () => {
-        wsSendMessage(contact["userId"], document.getElementById("actionNewMessageInput").value);
+        wsSendMessage(contact["userId"], actionNewMessageInputElement.value);
+        actionNewMessageInputElement.value = "";
     });
 
     // TODO: handle unapproved contacts
@@ -164,15 +167,14 @@ let loadChat = (contact) => {
         let messages = fetchMessages(userId, contact["userId"], 100);
 
         let chatBody = document.getElementById("chatMessages");
-        let chatBodyUL = document.createElement("ul");
-        chatBody.appendChild(chatBodyUL);
         for (let message of messages["messages"]) {
-            if (message["userOriginal"] == userId && message["userTranslated"] == contact["userId"]) {
-                chatBodyUL.innerHTML += '<li class="message_to"><p>' + message["original"] + '</p></li>';
-            } else if (message["userOriginal"] == contact["userId"] && message["userTranslated"] == userId) {
-                chatBodyUL.innerHTML += '<li class="message_from"><p>' + message["translated"] + '</p></li>';
+            if (message["userOriginal"] === userId && message["userTranslated"] === contact["userId"]) {
+                chatBody.innerHTML += '<li class="message_to"><p>' + message["original"] + '</p></li>';
+            } else if (message["userOriginal"] === contact["userId"] && message["userTranslated"] === userId) {
+                chatBody.innerHTML += '<li class="message_from"><p>' + message["translated"] + '</p></li>';
             }
         }
+        modalBody.scrollTop = modalBody.scrollHeight;
     }
 
     return null;
